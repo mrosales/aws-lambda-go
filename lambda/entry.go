@@ -5,8 +5,10 @@ package lambda
 import (
 	"context"
 	"errors"
-	"log"
 	"os"
+
+	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 )
 
 // Start takes a handler and talks to an internal Lambda endpoint to pass requests to the handler. If the
@@ -77,7 +79,9 @@ var (
 	startFunctions = []*startFunction{rpcStartFunction, runtimeAPIStartFunction}
 
 	// This allows end to end testing of the Start functions, by tests overwriting this function to keep the program alive
-	logFatalf = log.Fatalf
+	logFatalf = func(format string, args ...interface{}) {
+		log.Fatal().Msgf(format, args...)
+	}
 )
 
 // StartHandlerWithContext is the same as StartHandler except sets the base context for the function.
@@ -86,6 +90,14 @@ var (
 //
 //  func Invoke(context.Context, []byte) ([]byte, error)
 func StartHandlerWithContext(ctx context.Context, handler Handler) {
+	levelStr := os.Getenv("LOG_LEVEL")
+	level, err := zerolog.ParseLevel(levelStr)
+	if err != nil {
+		log.Warn().Msgf("invalid log level %s – defaulting to info", levelStr)
+		level = zerolog.InfoLevel
+	}
+	zerolog.SetGlobalLevel(level)
+
 	var keys []string
 	for _, start := range startFunctions {
 		config := os.Getenv(start.env)
