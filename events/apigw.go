@@ -43,7 +43,7 @@ type APIGatewayProxyRequestContext struct {
 	Authorizer       map[string]interface{}    `json:"authorizer"`
 	HTTPMethod       string                    `json:"httpMethod"`
 	RequestTime      string                    `json:"requestTime"`
-	RequestTimeEpoch int64                     `json:"requestTimeEpoch"`
+	RequestTimeEpoch MilliSecondsEpochTime     `json:"requestTimeEpoch"`
 	APIID            string                    `json:"apiId"` // The API Gateway rest API Id
 }
 
@@ -74,7 +74,7 @@ type APIGatewayV2HTTPRequestContext struct {
 	DomainName   string                                               `json:"domainName"`
 	DomainPrefix string                                               `json:"domainPrefix"`
 	Time         string                                               `json:"time"`
-	TimeEpoch    int64                                                `json:"timeEpoch"`
+	TimeEpoch    MilliSecondsEpochTime                                `json:"timeEpoch"`
 	HTTP         APIGatewayV2HTTPRequestContextHTTPDescription        `json:"http"`
 }
 
@@ -184,7 +184,7 @@ type APIGatewayWebsocketProxyRequestContext struct {
 	MessageDirection   string                    `json:"messageDirection"`
 	MessageID          interface{}               `json:"messageId"`
 	RequestTime        string                    `json:"requestTime"`
-	RequestTimeEpoch   int64                     `json:"requestTimeEpoch"`
+	RequestTimeEpoch   MilliSecondsEpochTime     `json:"requestTimeEpoch"`
 	RouteKey           string                    `json:"routeKey"`
 	Status             string                    `json:"status"`
 }
